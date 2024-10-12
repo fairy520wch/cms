@@ -79,7 +79,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
             ElMessage.success('注册成功，请登录');
             router.push('/login');
         } else {
-            return false;
+            ElMessage.error('表单验证失败');
         }
     });
 };

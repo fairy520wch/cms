@@ -94,7 +94,6 @@ const submitForm = (formEl: FormInstance | undefined) => {
             }
         } else {
             ElMessage.error('登录失败');
-            return false;
         }
     });
 };

@@ -177,7 +177,7 @@ const onSubmit = (formEl: FormInstance | undefined) => {
             console.log(form);
             ElMessage.success('提交成功！');
         } else {
-            return false;
+            ElMessage.error('表单验证失败');
         }
     });
 };
