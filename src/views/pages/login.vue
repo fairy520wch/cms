@@ -33,8 +33,16 @@
                     <el-checkbox class="pwd-checkbox" v-model="checked" label="记住密码" />
                     <el-link type="primary" @click="$router.push('/reset-pwd')">忘记密码</el-link>
                 </div>
+                <el-form-item prop="captcha">
+                    <el-input v-model="param.captcha" placeholder="验证码">
+                    <template #prepend>
+                        <el-button @click="getCaptcha">换一个</el-button>
+                    </template>
+                    </el-input>
+                    <img :src="captchaSrc" @click="getCaptcha" alt="验证码" />
+                </el-form-item>
                 <el-button class="login-btn" type="primary" size="large" @click="submitForm(login)">登录</el-button>
-                <p class="login-tips">Tips : 用户名和密码随便填。</p>
+                <!-- <p class="login-tips">Tips : 用户名和密码随便填。</p> -->
                 <p class="login-text">
                     没有账号？<el-link type="primary" @click="$router.push('/register')">立即注册</el-link>
                 </p>
@@ -50,10 +58,12 @@ import { usePermissStore } from '@/store/permiss';
 import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 import type { FormInstance, FormRules } from 'element-plus';
+import svgCaptcha from 'svg-captcha';
 
 interface LoginInfo {
     username: string;
     password: string;
+    captcha: string;
 }
 
 const lgStr = localStorage.getItem('login-param');
@@ -64,6 +74,7 @@ const router = useRouter();
 const param = reactive<LoginInfo>({
     username: defParam ? defParam.username : '',
     password: defParam ? defParam.password : '',
+    captcha: '',
 });
 
 const rules: FormRules = {
@@ -78,6 +89,16 @@ const rules: FormRules = {
 };
 const permiss = usePermissStore();
 const login = ref<FormInstance>();
+
+const captchaSrc = ref('');
+const captchaText = ref('');
+
+const getCaptcha = () => {
+  const captcha = svgCaptcha.create();
+  captchaSrc.value = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(captcha.data)));
+  captchaText.value = captcha.text;
+};
+
 const submitForm = (formEl: FormInstance | undefined) => {
     if (!formEl) return;
     formEl.validate((valid: boolean) => {
@@ -98,6 +119,9 @@ const submitForm = (formEl: FormInstance | undefined) => {
         }
     });
 };
+
+// 在组件创建时获取第一个验证码
+getCaptcha();
 
 const tabs = useTabsStore();
 tabs.clearTabs();
@@ -168,4 +192,12 @@ tabs.clearTabs();
     font-size: 14px;
     color: #787878;
 }
+
+img[src^="data:image"] {
+  /* 设置验证码图片的大小 */
+  width: 100px;
+  height: 40px;
+  cursor: pointer;
+}
+
 </style>

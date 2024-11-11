@@ -38,6 +38,16 @@
                         </template>
                     </el-input>
                 </el-form-item>
+
+                <el-form-item prop="captcha">
+                    <el-input v-model="param.captcha" placeholder="验证码">
+                        <template #prepend>
+                            <el-button>换一个</el-button>
+                        </template>
+                    </el-input>
+                    <img :src="captchaSrc" @click="getCaptcha" alt="验证码" />
+                </el-form-item>
+
                 <el-button class="login-btn" type="primary" size="large" @click="submitForm(register)">注册</el-button>
                 <p class="login-text">
                     已有账号，<el-link type="primary" @click="$router.push('/login')">立即登录</el-link>
@@ -52,12 +62,14 @@ import { ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus';
 import { Register } from '@/types/user';
+import svgCaptcha from 'svg-captcha';
 
 const router = useRouter();
 const param = reactive<Register>({
     username: '',
     password: '',
     email: '',
+    captcha: '',
 });
 
 const rules: FormRules = {
@@ -70,19 +82,36 @@ const rules: FormRules = {
     ],
     password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
     email: [{ required: true, message: '请输入邮箱', trigger: 'blur' }],
+    captcha: [{ required: true, message: '请输入验证码', trigger: 'blur' }],
 };
 const register = ref<FormInstance>();
-const submitForm = (formEl: FormInstance | undefined) => {
-    if (!formEl) return;
-    formEl.validate((valid: boolean) => {
-        if (valid) {
-            ElMessage.success('注册成功，请登录');
-            router.push('/login');
-        } else {
-            return false;
-        }
-    });
+
+const captchaSrc = ref('');
+const captchaText = ref('');
+
+const getCaptcha = () => {
+    // 这个函数现在不执行任何操作，因为我们不需要动态生成验证码
+    const captcha = svgCaptcha.create();
+    captchaSrc.value = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(captcha.data)));
+    captchaText.value = captcha.text;
 };
+
+const submitForm = (formEl: FormInstance | undefined) => {
+  if (!formEl) return;
+  formEl.validate((valid: boolean) => {
+    if (valid && param.captcha === captchaText.value) {
+      ElMessage.success('注册成功，请登录');
+      router.push('/login');
+    } else {
+      ElMessage.error('验证码错误');
+      getCaptcha(); // 重新生成验证码
+      return false;
+    }
+  });
+};
+
+// 在组件创建时获取第一个验证码
+getCaptcha();
 </script>
 
 <style scoped>
@@ -131,5 +160,11 @@ const submitForm = (formEl: FormInstance | undefined) => {
     margin-top: 20px;
     font-size: 14px;
     color: #787878;
+}
+
+img[src$=".png"] {
+    width: 100px; /* 根据实际图片大小调整 */
+    height: 40px; /* 根据实际图片大小调整 */
+    cursor: pointer;
 }
 </style>
