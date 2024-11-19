@@ -2,8 +2,9 @@
     <div>
         <TableSearch :query="query" :options="searchOpt" :search="handleSearch" />
         <div class="container">
-            <TableCustom :columns="columns" :tableData="tableData" :total="page.total" :viewFunc="handleView"
-                :delFunc="handleDelete" :page-change="changePage" :editFunc="handleEdit">
+            <TableCustom :columns="columns" :tableData="tableData" :total="page.total" :currentPage="page.index"
+                :pageSize="page.size" :viewFunc="handleView" :delFunc="handleDelete" :changePage="changePage"
+                :editFunc="handleEdit">
                 <template #toolbarBtn>
                     <el-button type="warning" :icon="CirclePlusFilled" @click="visible = true">新增</el-button>
                 </template>
@@ -37,7 +38,7 @@ const query = reactive({
 });
 const searchOpt = ref<FormOptionList[]>([
     { type: 'input', label: '用户名：', prop: 'name' }
-])
+]);
 const handleSearch = () => {
     changePage(1);
 };
@@ -49,15 +50,15 @@ let columns = ref([
     { prop: 'phone', label: '手机号' },
     { prop: 'role', label: '角色' },
     { prop: 'operator', label: '操作', width: 250 },
-])
+]);
 const page = reactive({
     index: 1,
     size: 10,
     total: 0,
-})
+});
 const tableData = ref<User[]>([]);
 const getData = async () => {
-    const res = await fetchUserData()
+    const res = await fetchUserData();
     tableData.value = res.data.list;
     page.total = res.data.pageTotal;
 };
@@ -79,7 +80,7 @@ let options = ref<FormOption>({
         { type: 'input', label: '邮箱', prop: 'email', required: true },
         { type: 'input', label: '角色', prop: 'role', required: true },
     ]
-})
+});
 const visible = ref(false);
 const isEdit = ref(false);
 const rowData = ref({});
@@ -105,7 +106,7 @@ const viewData = ref({
     list: []
 });
 const handleView = (row: User) => {
-    viewData.value.row = { ...row }
+    viewData.value.row = { ...row };
     viewData.value.list = [
         {
             prop: 'id',
@@ -135,14 +136,14 @@ const handleView = (row: User) => {
             prop: 'date',
             label: '注册日期',
         },
-    ]
+    ];
     visible1.value = true;
 };
 
 // 删除相关
 const handleDelete = (row: User) => {
     ElMessage.success('删除成功');
-}
+};
 </script>
 
 <style scoped></style>

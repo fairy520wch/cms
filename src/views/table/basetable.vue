@@ -2,9 +2,9 @@
 	<div>
 		<TableSearch :query="query" :options="searchOpt" :search="handleSearch" />
 		<div class="container">
-			<TableCustom :columns="columns" :tableData="tableData" :total="page.total" :viewFunc="handleView"
-				:delFunc="handleDelete" :editFunc="handleEdit" :refresh="getData" :currentPage="page.index"
-				:changePage="changePage">
+			<TableCustom :columns="columns" :tableData="tableData" :total="page.total" :currentPage="page.index"
+				:pageSize="page.size" :viewFunc="handleView" :delFunc="handleDelete" :editFunc="handleEdit"
+				:refresh="getData" :changePage="changePage">
 				<template #toolbarBtn>
 					<el-button type="warning" :icon="CirclePlusFilled" @click="visible = true">新增</el-button>
 				</template>
@@ -59,7 +59,7 @@ const query = reactive({
 });
 const searchOpt = ref<FormOptionList[]>([
 	{ type: 'input', label: '用户名：', prop: 'name' }
-])
+]);
 const handleSearch = () => {
 	changePage(1);
 };
@@ -73,15 +73,15 @@ let columns = ref([
 	{ prop: 'thumb', label: '头像' },
 	{ prop: 'state', label: '账户状态' },
 	{ prop: 'operator', label: '操作', width: 250 },
-])
+]);
 const page = reactive({
 	index: 1,
 	size: 10,
 	total: 200,
-})
+});
 const tableData = ref<TableItem[]>([]);
 const getData = async () => {
-	const res = await fetchData()
+	const res = await fetchData();
 	tableData.value = res.data.list;
 };
 getData();
@@ -101,7 +101,7 @@ let options = ref<FormOption>({
 		{ type: 'switch', activeText: '正常', inactiveText: '异常', label: '账户状态', prop: 'state', required: true },
 		{ type: 'upload', label: '头像', prop: 'thumb', required: true },
 	]
-})
+});
 const visible = ref(false);
 const isEdit = ref(false);
 const rowData = ref({});
@@ -127,7 +127,7 @@ const viewData = ref({
 	list: []
 });
 const handleView = (row: TableItem) => {
-	viewData.value.row = { ...row }
+	viewData.value.row = { ...row };
 	viewData.value.list = [
 		{
 			prop: 'id',
@@ -149,14 +149,14 @@ const handleView = (row: TableItem) => {
 			prop: 'thumb',
 			label: '头像',
 		},
-	]
+	];
 	visible1.value = true;
 };
 
 // 删除相关
 const handleDelete = (row: TableItem) => {
 	ElMessage.success('删除成功');
-}
+};
 </script>
 
 <style scoped>
