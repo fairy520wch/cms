@@ -105,6 +105,14 @@ const routes: RouteRecordRaw[] = [
                 component: () => import(/* webpackChunkName: "ucenter" */ '../views/pages/ucenter.vue'),
             },
             {
+                path: '/setting',
+                name: 'setting',
+                meta: {
+                    title: '设置',
+                },
+                component: () => import('../views/setting/reset.vue'),
+            },
+            {
                 path: '/editor',
                 name: 'editor',
                 meta: {
