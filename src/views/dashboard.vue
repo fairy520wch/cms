@@ -1,5 +1,10 @@
 <template>
     <div>
+      <el-row :gutter="20" class="mgb20">
+        <el-col :span="6">
+          <WeatherWidget />
+        </el-col>
+      </el-row>
         <el-row :gutter="20" class="mgb20">
             <el-col :span="6">
                 <el-card shadow="hover" body-class="card-body">
@@ -127,6 +132,7 @@
 </template>
 
 <script setup lang="ts" name="dashboard">
+import WeatherWidget from '@/components/WeatherWidget.vue';
 import countup from '@/components/countup.vue';
 import { use, registerMap } from 'echarts/core';
 import { BarChart, LineChart, PieChart, MapChart } from 'echarts/charts';

@@ -51,6 +51,24 @@ const routes: RouteRecordRaw[] = [
                 component: () => import(/* webpackChunkName: "system-menu" */ '../views/system/menu.vue'),
             },
             {
+                path: '/product-management',
+                name: 'product-management',
+                meta: {
+                    title: '商品管理',
+                    permiss: '14',
+                },
+                component: () => import(/* webpackChunkName: "product-management" */ '../views/product-management.vue'),
+            },
+            {
+                path: '/finance-management',
+                name: 'finance-management',
+                meta: {
+                    title: '财务管理',
+                    permiss: '15',
+                },
+                component: () => import(/* webpackChunkName: "finance-management" */ '../views/finance-management.vue'),
+            },
+            {
                 path: '/table',
                 name: 'basetable',
                 meta: {

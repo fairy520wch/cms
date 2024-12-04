@@ -77,5 +77,6 @@ declare module '@vue/runtime-core' {
     TableEdit: typeof import('./src/components/table-edit.vue')['default']
     TableSearch: typeof import('./src/components/table-search.vue')['default']
     Tabs: typeof import('./src/components/tabs.vue')['default']
+    WeatherWidget: typeof import('./src/components/WeatherWidget.vue')['default']
   }
 }

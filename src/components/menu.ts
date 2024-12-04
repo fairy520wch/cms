@@ -31,6 +31,18 @@ export const menuData: Menus[] = [
                 index: '/system-menu',
                 title: '菜单管理',
             },
+            {
+                id: '14',
+                pid: '1',
+                index: '/product-management',
+                title: '商品管理',
+            },
+            {
+                id: '15',
+                pid: '1',
+                index: '/finance-management',
+                title: '财务管理',
+            },
         ],
     },
     {
