@@ -1,7 +1,13 @@
 import axios, { AxiosInstance, AxiosError, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
+import { getToken } from '@/utils/authToken';
 
 const service: AxiosInstance = axios.create({
-    timeout: 5000
+  timeout: 5000,
+  baseURL: 'http://8.141.28.90:80',
+  headers: {
+    // 传递 token
+    token: getToken(),
+},
 });
 
 service.interceptors.request.use(
