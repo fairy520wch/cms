@@ -12,6 +12,7 @@
 </template>
 
 <script>
+  let a='11';
 export default {
   methods: {
       goBack(){
